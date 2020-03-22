@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Web.Datos.Modelos.VendedoresModel>
+@{}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Vendedores</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th>
+
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FirstOrDefault().Codigo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.FirstOrDefault().Apellido)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.FirstOrDefault().Numero_Identificacion)
+                            </th>
+
+                            <th class="ocultar">
+                                @Html.DisplayNameFor(model => model.FirstOrDefault().VendedorId)
+                            </th>
+
+
+                            <th class="ocultar">
+                                @Html.DisplayNameFor(model => model.FirstOrDefault().CiudadId)
+                            </th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    <button onclick="AgregarVendedor(@item.VendedorId)" class="btn btn-warning waves-effect waves-light"
+                                            data-target="#modalagregar"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Editar">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                    </button>
+
+                                    <button onclick="EliminarVendedor(@item.VendedorId, @item.CiudadId)" class="btn btn-danger waves-effect waves-light"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Eliminar">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Codigo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Nombre)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Apellido)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Numero_Identificacion)
+                                </td>
+
+                                <td class="ocultar">
+                                    @Html.DisplayFor(modelItem => item.VendedorId)
+                                </td>
+                                <td class="ocultar">
+                                    @Html.DisplayFor(modelItem => item.CiudadId)
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var URLEliminarVendedor ='@Url.Action("_EliminarVendedor","CiudadVendedores")'
+
+    
+var my_func = function (event) {
+    event.preventDefault();
+};
+
+function EliminarVendedor(_id, _ciudad) {
+ this.addEventListener("submit", my_func, true);
+    var parametros = {};
+
+    if (typeof (_id) !== 'undefined') {
+        parametros = { id: _id , ciudad: _ciudad};
+    }
+
+    $.ajax({
+        cache: false,
+        async: true,
+        type: "GET",
+        url: URLEliminarVendedor,
+        data: parametros,
+        success: function (response) {
+
+            $('#detallevendedor').html('');
+            $('#detallevendedor').html(response);
+
+        }
+    });
+}
+
+
+</script>

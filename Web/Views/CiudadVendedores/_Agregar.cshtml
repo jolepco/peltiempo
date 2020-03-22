@@ -1,0 +1,90 @@
+﻿@model Web.Models.ModeloCompleto
+@{
+
+}
+
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">@Html.DisplayNameFor(model => model.Title)</h4>
+        </div>
+
+        @using (Html.BeginForm("_Agregar", "CiudadVendedores", FormMethod.Post, new { id = "frm-d", enctype = "multipart/form-data" }))
+        {
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "help-block" })
+        @Html.HiddenFor(model => model.ciudad.CiudadId)
+
+
+        <div class="row" id="Identificacion">
+            <div class="form-group">
+                @if (Model.ciudad.CiudadId == 0)
+                {
+
+                    <div class="col-md-6">
+                        @Html.DisplayNameFor(model => model.ciudad.Codigo)
+                        @Html.EditorFor(model => model.ciudad.Codigo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ciudad.Codigo, "", new { @class = "help-block" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DisplayNameFor(model => model.ciudad.Nombre)
+                        @Html.EditorFor(model => model.ciudad.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ciudad.Nombre, "", new { @class = "help-block" })
+                    </div>
+                }
+                else
+                {
+
+                    <div class="col-md-3">
+                        @Html.DisplayNameFor(model => model.ciudad.CiudadId)
+                        @Html.DropDownListFor(x => x.ciudad.CiudadId, Model.listaCiudades
+                       , string.Format("{0}", "Seleccionar")
+                     , new
+                     {
+                         @class = "form-control"
+                     }
+                     )
+                        @Html.ValidationMessageFor(model => model.ciudad.CiudadId, "", new { @class = "text-danger" })
+                    </div>
+
+                }
+            </div>
+
+            <br />
+            <br />
+
+            <div id="detlle">
+                <br />
+                <div class="form-group">
+                    <p>
+                        <button id="agregarVendedor" type="button" onclick="AgregarVendedor()" class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+                                data-target="#modalagregar">
+                            <i class="fa fa-plus"></i> Agregar Vendedores
+                        </button>
+
+                    </p>
+                </div>
+
+                <div id="detallevendedor" class="form-group">
+                    @Html.Partial("~/Views/CiudadVendedores/detalleVEndedor.cshtml", Model.vendedores)
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+            @*<button type="submit" data-ajax="true" class="btn btn-primary waves-effect waves-light">Guardar</button>*@
+        </div>
+    </div>
+        }
+    </div>
+</div>
+
+<script>
+
+
+
+</script>

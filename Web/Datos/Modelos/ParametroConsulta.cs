@@ -14,4 +14,14 @@ namespace Web.Datos.Modelos
     {
         public Models.ModeloCompleto modelo { get; set; }
     }
+
+    public class ParametroConsultaCiudad
+    {
+        public Datos.Modelos.CiudadModel  modelo { get; set; }
+    }
+    
+    public class ParametroConsultaVendedores
+    {
+        public Datos.Modelos.VendedoresModel  modelo { get; set; }
+    }
 }

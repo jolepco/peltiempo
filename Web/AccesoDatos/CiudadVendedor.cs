@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Web.Datos.Entidades;
+using Web.Datos.Modelos;
 
 namespace Web.AccesoDatos
 {
@@ -14,14 +16,57 @@ namespace Web.AccesoDatos
         }
 
         #region ciudades
-        public async System.Threading.Tasks.Task<List<Ciudad>> listarCiudades()
+        public async Task<bool> GuardarCiudadAsing(CiudadModel modelo)
         {
-            List<Ciudad> ciudades = new List<Ciudad>();
+            bool respuesta = false;
+            Ciudad ciudades = new Ciudad();
             try
             {
                 using (ContextoDatos db = new ContextoDatos())
                 {
-                    ciudades = await db.Ciudades.ToListAsync();
+                    Ciudad ciudad = new Ciudad
+                    {
+                        CiudadId = modelo.CiudadId,
+                        Codigo = modelo.Codigo,
+                        Nombre = modelo.Nombre,
+                    };
+                    if (ciudad.CiudadId > 0)
+                    {
+                        db.Entry(ciudad).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        db.Entry(ciudad).State = EntityState.Added;
+
+                    }
+                    db.SaveChanges();
+                   // System.Threading.Tasks.Task<int> rta = db.SaveChangesAsync();
+                    respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            return respuesta;
+        }
+
+        public async System.Threading.Tasks.Task<List<Datos.Modelos.CiudadModel>> listarCiudades()
+        {
+            List<Datos.Modelos.CiudadModel> ciudades = new List<Datos.Modelos.CiudadModel>();
+            try
+            {
+                using (ContextoDatos db = new ContextoDatos())
+                {
+                   var  ciudades1 = db.Ciudades.ToList();
+                    ciudades.AddRange(ciudades1.Select(c => new Datos.Modelos.CiudadModel
+                    {
+                        CiudadId = c.CiudadId, 
+                        Codigo = c.Codigo, 
+                        Nombre = c.Nombre, 
+                    }).ToList());
+                   // ciudades = await Task.Run (()=> {  return db.Ciudades.ToList(); });
+
                 }
             }
             catch (Exception ex)
@@ -43,7 +88,8 @@ namespace Web.AccesoDatos
                     if (_ciudad.CiudadId > 0)
                     {
                         db.Entry(_ciudad).State = EntityState.Deleted;
-                        System.Threading.Tasks.Task<int> rta = db.SaveChangesAsync();
+                        db.SaveChanges();
+                        //System.Threading.Tasks.Task<int> rta = db.SaveChangesAsync();
                         respuesta = true;
                     }
                 }
@@ -55,17 +101,52 @@ namespace Web.AccesoDatos
             return respuesta;
         }
 
+        public async Task<bool> EliminarVendedor(int codigo)
+        {
+            bool respuesta = false;
+            using (var db = new ContextoDatos())
+            {
+                var buscar = db.Vendedores.Find(codigo);
+               
+                    if (buscar.VendedorId > 0)
+                    {
+                        db.Entry(buscar).State = EntityState.Deleted;
+                        db.SaveChanges();
+                        respuesta = true;
+                    }
+            }
+            return respuesta;
+        }
+
         #endregion
 
         #region vendedor
-        public async System.Threading.Tasks.Task<Vendedor> listarunVendedor(int vendedor)
+        public async System.Threading.Tasks.Task<Datos.Modelos.VendedoresModel> listarunVendedor(int vendedor)
         {
-            Vendedor _vendedor = new Vendedor();
+            Datos.Modelos.VendedoresModel _vendedor = new Datos.Modelos.VendedoresModel();
             try
             {
                 using (ContextoDatos db = new ContextoDatos())
                 {
-                    _vendedor = await db.Vendedores.FindAsync(vendedor);
+                    var _ciudad = db.Ciudades.ToList();
+                  var  _ve = db.Vendedores.Find(vendedor);
+                    _vendedor = new Datos.Modelos.VendedoresModel
+                    {
+                        Apellido = _ve.Apellido,
+                        CiudadId = _ve.CiudadId,
+                        Codigo = _ve.Codigo,
+                        Nombre = _ve.Nombre,
+                        Numero_Identificacion = _ve.Numero_Identificacion,
+                        VendedorId = _ve.VendedorId,
+                        Ciudad = new Datos.Modelos.CiudadModel
+                        {
+                            CiudadId = _ve.Ciudad.CiudadId,
+                            Codigo = _ve.Ciudad.Codigo,
+                            Nombre = _ve.Ciudad.Nombre,
+                        }, combociudades= _ciudad?.Select(c=> new Datos.Modelos.ComboModel { 
+                        Id = c.CiudadId.ToString(), Nombre = c.Nombre,
+                        }).ToList(), 
+                    };
                 }
             }
             catch (Exception ex)
@@ -75,7 +156,7 @@ namespace Web.AccesoDatos
             return _vendedor;
         }
 
-        public async System.Threading.Tasks.Task<bool> EliminarVendedor(int vendedor)
+        public async Task<bool> GuardarVendedorAsing(VendedoresModel modelo)
         {
             bool respuesta = false;
             Ciudad ciudades = new Ciudad();
@@ -83,13 +164,26 @@ namespace Web.AccesoDatos
             {
                 using (ContextoDatos db = new ContextoDatos())
                 {
-                    Vendedor _vendedor = db.Vendedores.Find(vendedor);
-                    if (_vendedor.CiudadId > 0)
+                    Vendedor vendedor = new Vendedor
                     {
-                        db.Entry(_vendedor).State = EntityState.Deleted;
-                        System.Threading.Tasks.Task<int> rta = db.SaveChangesAsync();
-                        respuesta = true;
+                        Apellido = modelo.Apellido, 
+                        Numero_Identificacion= modelo.Numero_Identificacion, 
+                        VendedorId= modelo.VendedorId,
+                        CiudadId = modelo.CiudadId,
+                        Codigo = modelo.Codigo,
+                        Nombre = modelo.Nombre,
+                    };
+                    if (vendedor.VendedorId > 0)
+                    {
+                        db.Entry(vendedor).State = EntityState.Modified;
                     }
+                    else
+                    {
+                        db.Entry(vendedor).State = EntityState.Added;
+
+                    }
+                    db.SaveChanges();
+                    respuesta = true;
                 }
             }
             catch (Exception ex)
@@ -97,6 +191,48 @@ namespace Web.AccesoDatos
                 throw (ex);
             }
             return respuesta;
+        }
+
+        public async Task<List<Datos.Modelos.VendedoresModel>> ObtenerunVendedorCiudad(int modelo)
+        {
+            try
+            {
+                List<Datos.Modelos.VendedoresModel> vendedor = new List<VendedoresModel>();
+                using (ContextoDatos db = new ContextoDatos())
+                {
+                    var _vend = db.Vendedores.Where(r => r.CiudadId == modelo).ToList();
+                    var ciudadesN = db.Ciudades.ToList();
+
+                    vendedor.AddRange(
+                        _vend?.Select(v => new Datos.Modelos.VendedoresModel
+                        {
+                            Apellido = v.Apellido,
+                            ciudadantiguaid = v.CiudadId,
+                            CiudadId = v.Ciudad.CiudadId,
+                            Ciudad = new CiudadModel
+                            {
+                                CiudadId = v.Ciudad.CiudadId,
+                                Codigo = v.Ciudad.Codigo,
+                                Nombre = v.Ciudad.Nombre,
+                            },
+                            Codigo = v.Codigo,
+                            combociudades = ciudadesN?.Select(r => new ComboModel
+                            {
+                                Id = r.CiudadId.ToString(),
+                                Nombre = r.Nombre
+                            }).ToList(),
+                            Nombre = v.Nombre,
+                            Numero_Identificacion = v.Numero_Identificacion,
+                            VendedorId = v.VendedorId,
+                        }).ToList());
+                    return vendedor;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            
         }
 
         #endregion
@@ -111,8 +247,8 @@ namespace Web.AccesoDatos
             {
                 using (ContextoDatos db = new ContextoDatos())
                 {
-                    ciudadesTodas = await db.Ciudades.ToListAsync();
-                    vendedores = await db.Vendedores.Where(c => c.CiudadId == ciudad).ToListAsync();
+                    ciudadesTodas = db.Ciudades.ToList();
+                    vendedores = db.Vendedores.Where(c => c.CiudadId == ciudad).ToList();
                 }
             }
             catch (Exception ex)
@@ -120,14 +256,50 @@ namespace Web.AccesoDatos
                 throw (ex);
             }
 
-            modelo.ciudad = new Ciudad();
-            modelo.ciudad = ciudadesTodas.Where(c => c.CiudadId == ciudad).FirstOrDefault();
-            modelo.vendedores = new List<Vendedor>();
-            modelo.vendedores = vendedores;
-            modelo.listaCiudades = new SelectList(ciudadesTodas, "CiudadId", "Nombre");
+            List<Datos.Modelos.CiudadModel> _ciudad = new List<Datos.Modelos.CiudadModel>();
+            _ciudad.AddRange(ciudadesTodas.Select( r => new Datos.Modelos.CiudadModel {
+                CiudadId = r.CiudadId, 
+                Codigo = r.Codigo, 
+                Nombre = r.Nombre,
+            }).ToList());
+
+            modelo.ciudad = new Datos.Modelos.CiudadModel();
+            modelo.ciudad = ciudadesTodas.Where(c => c.CiudadId == ciudad).Select(r=> new Datos.Modelos.CiudadModel { 
+            CiudadId = r.CiudadId,  Codigo = r.Codigo, Nombre =r.Nombre, 
+            }).FirstOrDefault();
+            modelo.vendedores = new List<Datos.Modelos.VendedoresModel>();
+
+            modelo.vendedores.AddRange(
+                
+                vendedores.Select(v => new Datos.Modelos.VendedoresModel
+                {
+                    Apellido = v.Apellido, 
+                    Ciudad =                  
+                    new Datos.Modelos.CiudadModel {
+                        CiudadId = v.Ciudad.CiudadId, 
+                    Codigo = v.Ciudad.Codigo, 
+                    Nombre = v.Ciudad.Nombre,
+                    }, CiudadId = v.CiudadId, 
+                    Codigo = v.Codigo,
+                    Nombre= v.Nombre, 
+                    Numero_Identificacion = v.Numero_Identificacion, 
+                    VendedorId =v.VendedorId, 
+                }
+                ).ToList());
+
+            List<Datos.Modelos.ComboModel> combo = new List<Datos.Modelos.ComboModel>();
+            combo.AddRange(ciudadesTodas.Select(c => new Datos.Modelos.ComboModel
+                {
+                    Id = c.CiudadId.ToString(),
+                    Nombre = c.Nombre,
+                }).ToList()
+                );
+            modelo.Combosciudad = combo;
+           // modelo.listaCiudades = new SelectList(combo, "Id", "Nombre");
             return modelo;
         }
 
+      
         #endregion
 
         #region transaccion 
@@ -158,7 +330,7 @@ namespace Web.AccesoDatos
                         }
                         int numero = await db.SaveChangesAsync();
 
-                        foreach (Vendedor vendedor in modelo.vendedores)
+                        foreach (var vendedor in modelo.vendedores)
                         {
                             Vendedor _vendedor = new Datos.Entidades.Vendedor
                             {

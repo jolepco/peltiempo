@@ -142,11 +142,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\ApiCiudadVendedoresController.cs" />
+    <Compile Include="Controllers\Api\CiudadVendedoresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Datos\Entidades\Ciudad.cs" />
     <Compile Include="Datos\Entidades\ContextoDatos.cs" />
     <Compile Include="Datos\Entidades\Vendedor.cs" />
+    <Compile Include="Datos\Modelos\CiudadModel.cs" />
+    <Compile Include="Datos\Modelos\ComboModel.cs" />
     <Compile Include="Datos\Modelos\ParametroConsulta.cs" />
+    <Compile Include="Datos\Modelos\ResponseModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -177,6 +181,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\propios\CiudadesVendedor.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -191,6 +196,12 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\CiudadVendedores\Index.cshtml" />
+    <Content Include="Views\CiudadVendedores\_Agregar.cshtml" />
+    <Content Include="Views\CiudadVendedores\detalleVendedor.cshtml" />
+    <Content Include="Views\CiudadVendedores\AgregarVendedor.cshtml" />
+    <Content Include="Views\CiudadVendedores\listarCiudades.cshtml" />
+    <Content Include="Views\CiudadVendedores\AgregarCiudad.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

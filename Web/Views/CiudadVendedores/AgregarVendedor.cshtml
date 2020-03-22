@@ -1,0 +1,111 @@
+﻿@model Web.Datos.Modelos.VendedoresModel
+@{ }
+
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Editar-Agregar</h4>
+        </div>
+
+
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "help-block" })
+            @Html.HiddenFor(model => model.VendedorId)
+            @Html.HiddenFor(model => model.ciudadantiguaid)
+
+            <div class="row" id="Identificacion">
+                <div class="form-group">
+
+                    <div class="col-md-6">
+                        @Html.DisplayNameFor(model => model.Numero_Identificacion)
+                        @Html.EditorFor(model => model.Numero_Identificacion, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Numero_Identificacion, "", new { @class = "help-block" })
+                    </div>
+
+                    <div class="col-md-6">
+                        @Html.DisplayNameFor(model => model.Codigo)
+                        @Html.EditorFor(model => model.Codigo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Codigo, "", new { @class = "help-block" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DisplayNameFor(model => model.Nombre)
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "help-block" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DisplayNameFor(model => model.Apellido)
+                        @Html.EditorFor(model => model.Apellido, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "help-block" })
+                    </div>
+                    @if (Model.VendedorId > 0)
+                    {
+                        <div class="col-md-4">
+                            @Html.DisplayNameFor(model => model.Ciudad.CiudadId)
+                            @Html.DropDownListFor(x => x.Ciudad.CiudadId, Model.listaCiudades
+                                , string.Format("{0}", "Seleccionar")
+                              , new
+                              {
+                                  @class = "form-control"
+                              }
+                              )
+
+                            @Html.ValidationMessageFor(model => model.Ciudad.CiudadId, "", new { @class = "help-block" })
+
+                        </div>
+                    }
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                <button type="button" id="guardarvendedor" class="btn btn-primary waves-effect waves-light">Guardar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    var URLAgregarVendedor_popup='@Url.Action("AgregarVendedor","CiudadVendedores")'
+
+    $('#guardarvendedor').click(
+        function () {
+            debugger;
+            guardarvendedor();
+        });
+
+    function guardarvendedor() {
+        var vendedor = {
+            VendedorId: $('#VendedorId').val(),
+            Numero_Identificacion: $('#Numero_Identificacion').val(),
+            Codigo: $('#Codigo').val(),
+            Nombre: $('#Nombre').val(),
+            Apellido:$('#Apellido').val(),
+            CiudadId: $('#Ciudad_CiudadId').val(),
+            ciudadantiguaid: $('#ciudadantiguaid').val(),
+        }
+        $.ajax({
+            cache: false,
+            async: true,
+            type: "POST",
+            url: URLAgregarVendedor_popup,
+            data: JSON.stringify(vendedor),
+            cache: false,
+            contentType: "application/json",
+            success: function (response) {
+                debugger;
+                $("#modalagregar").modal('hide');//ocultamos el modal
+                $('body').removeClass('modal-open');//eliminamos la clase del body para poder hacer scroll
+                $('.modal-backdrop').remove();//eliminamos el backdrop del modal
+
+                $('#detallevendedor').html('');
+                $('#detallevendedor').html(response);
+
+            }
+        });
+    };
+</script>

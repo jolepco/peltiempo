@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Web.Datos.Modelos.CiudadModel>
+
+<table class="table table-hover table-responsive table-striped" id="MyTable">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Codigo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <button onclick="Agregar(@item.CiudadId)" class="btn btn-warning waves-effect waves-light"
+                            data-target="#modal-agregar"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Editar">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </button>
+
+                    <button onclick="Eliminar(@item.CiudadId)" class="btn btn-danger waves-effect waves-light"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Eliminar">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Codigo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

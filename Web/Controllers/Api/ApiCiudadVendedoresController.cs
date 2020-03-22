@@ -23,6 +23,7 @@ namespace Web.Controllers.Api
 
                 var listaSqlFiltrada = new Negocio.NegCiudadVendedor().ObtenerTodaslasCiudades().Result;
 
+
                 string listaJson = Newtonsoft.Json.JsonConvert.SerializeObject(listaSqlFiltrada);
 
                 var jsonContent = new StringContent(listaJson, Encoding.UTF8, "application/json");
@@ -40,7 +41,7 @@ namespace Web.Controllers.Api
         }
 
 
-        [HttpDelete]
+        [HttpPut]
         [Route("EliminarCiudad")]
         public HttpResponseMessage Eliminarciudad([FromBody]Datos.Modelos.ParametroConsulta paramQuery)
         {
@@ -71,7 +72,7 @@ namespace Web.Controllers.Api
         #endregion
 
         #region vendedor
-        [HttpGet]
+        [HttpPut]
         [Route("obtenervendedor")]
         public HttpResponseMessage Obtener2([FromBody]Datos.Modelos.ParametroConsulta paramQuery)
         {
@@ -80,7 +81,7 @@ namespace Web.Controllers.Api
             try
             {
 
-                var listaSqlFiltrada = new Negocio.NegCiudadVendedor().ObtenerunVendedor(paramQuery.codigo).Result; 
+                var listaSqlFiltrada = new Negocio.NegCiudadVendedor().ObtenerunVendedor(paramQuery.codigo).Result;
 
                 string listaJson = Newtonsoft.Json.JsonConvert.SerializeObject(listaSqlFiltrada);
 
@@ -99,9 +100,65 @@ namespace Web.Controllers.Api
         }
 
 
-        [HttpDelete]
+        [HttpPut]
+        [Route("obtenerVendedoresCiudad")]
+        public HttpResponseMessage ObtenervenCiudad([FromBody]Datos.Modelos.ParametroConsulta paramQuery)
+        {
+            HttpResponseMessage response = Request.CreateResponse();
+
+            try
+            {
+
+                var listaSqlFiltrada = new Negocio.NegCiudadVendedor().ObtenerunVendedorCiudad(paramQuery.codigo).Result;
+
+                string listaJson = Newtonsoft.Json.JsonConvert.SerializeObject(listaSqlFiltrada);
+
+                var jsonContent = new StringContent(listaJson, Encoding.UTF8, "application/json");
+
+                response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = jsonContent;
+                response.ReasonPhrase = "OK";
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            return response;
+        }
+
+
+
+        [HttpPut]
+        [Route("guardarvendedor")]
+        public HttpResponseMessage Obtenevendedor2([FromBody]Datos.Modelos.VendedoresModel paramQuery)
+        {
+            HttpResponseMessage response = Request.CreateResponse();
+
+            try
+            {
+
+                var listaSqlFiltrada = new Negocio.NegCiudadVendedor().GuardarVendedor(paramQuery);
+
+                string listaJson = Newtonsoft.Json.JsonConvert.SerializeObject(listaSqlFiltrada);
+
+                var jsonContent = new StringContent(listaJson, Encoding.UTF8, "application/json");
+
+                response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = jsonContent;
+                response.ReasonPhrase = "OK";
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            return response;
+        }
+
+        [HttpPut]
         [Route("EliminarVendedor")]
-        public HttpResponseMessage deleteVend([FromBody]Datos.Modelos.ParametroConsulta paramQuery)
+        public HttpResponseMessage Eliminarven([FromBody]Datos.Modelos.ParametroConsulta paramQuery)
         {
             HttpResponseMessage response = Request.CreateResponse();
 
@@ -125,10 +182,12 @@ namespace Web.Controllers.Api
 
             return response;
         }
+
+
         #endregion
 
         #region obtener modelo
-        [HttpGet]
+        [HttpPut]
         [Route("obtenermodelo")]
         public HttpResponseMessage obtenerunmodelo([FromBody]Datos.Modelos.ParametroConsulta paramQuery)
         {
@@ -168,6 +227,33 @@ namespace Web.Controllers.Api
             {
 
                 var listaSqlFiltrada = new Negocio.NegCiudadVendedor().GuardarCiudadVendedor(paramQuery.modelo).Result;
+
+                string listaJson = Newtonsoft.Json.JsonConvert.SerializeObject(listaSqlFiltrada);
+
+                var jsonContent = new StringContent(listaJson, Encoding.UTF8, "application/json");
+
+                response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = jsonContent;
+                response.ReasonPhrase = "OK";
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return response;
+        }
+
+        [HttpPut]
+        [Route("guardarciudad")]
+        public HttpResponseMessage guardadociudadees([FromBody]Datos.Modelos.ParametroConsultaCiudad paramQuery)
+        {
+            HttpResponseMessage response = Request.CreateResponse();
+
+            try
+            {
+
+                var listaSqlFiltrada = new Negocio.NegCiudadVendedor().GuardarCiudad(paramQuery.modelo);
 
                 string listaJson = Newtonsoft.Json.JsonConvert.SerializeObject(listaSqlFiltrada);
 

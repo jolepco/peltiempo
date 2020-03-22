@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Web.Datos.Modelos;
 
 namespace Web.Negocio
 {
@@ -10,11 +11,11 @@ namespace Web.Negocio
         /// Obtiene todas las ciudades
         /// </summary>
         /// <returns>lista de ciudades</returns>
-        public async System.Threading.Tasks.Task<List<Datos.Entidades.Ciudad>> ObtenerTodaslasCiudades()
+        public  async System.Threading.Tasks.Task<List<Datos.Modelos.CiudadModel>> ObtenerTodaslasCiudades()
         {
             try
             {
-                System.Threading.Tasks.Task<List<Datos.Entidades.Ciudad>> resultado = new AccesoDatos.CiudadVendedor().listarCiudades();
+                System.Threading.Tasks.Task<List<Datos.Modelos.CiudadModel>> resultado = new AccesoDatos.CiudadVendedor().listarCiudades();
                 return await resultado;
             }
             catch (Exception ex)
@@ -22,6 +23,8 @@ namespace Web.Negocio
                 throw (ex);
             }
         }
+       
+        
         /// <summary>
         /// Elimina ciudad
         /// </summary>
@@ -47,11 +50,11 @@ namespace Web.Negocio
         /// </summary>
         /// <param name="vendedor">id</param>
         /// <returns>entida de vendedor</returns>
-        public async System.Threading.Tasks.Task<Datos.Entidades.Vendedor> ObtenerunVendedor(int vendedor)
+        public async System.Threading.Tasks.Task<Datos.Modelos.VendedoresModel> ObtenerunVendedor(int vendedor)
         {
             try
             {
-                System.Threading.Tasks.Task<Datos.Entidades.Vendedor> resultado = new AccesoDatos.CiudadVendedor().listarunVendedor(vendedor);
+                System.Threading.Tasks.Task<Datos.Modelos.VendedoresModel> resultado = new AccesoDatos.CiudadVendedor().listarunVendedor(vendedor);
                 return await resultado;
             }
             catch (Exception ex)
@@ -59,17 +62,32 @@ namespace Web.Negocio
                 throw (ex);
             }
         }
+
+        public async System.Threading.Tasks.Task<List<Datos.Modelos.VendedoresModel>> ObtenerunVendedorCiudad(int codigo)
+        {
+            try
+            {
+                System.Threading.Tasks.Task<List<Datos.Modelos.VendedoresModel>> resultado = new AccesoDatos.CiudadVendedor().ObtenerunVendedorCiudad(codigo);
+                return await resultado;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
 
         /// <summary>
         /// Elimina un vendedor
         /// </summary>
         /// <param name="vendedor">id</param>
         /// <returns>retorna respuesta </returns>
-        public async System.Threading.Tasks.Task<bool> EliminarVendedor(int vendedor)
+
+        public async System.Threading.Tasks.Task<bool> EliminarVendedor(int codigo)
         {
             try
             {
-                System.Threading.Tasks.Task<bool> resultado = new AccesoDatos.CiudadVendedor().EliminarVendedor(vendedor);
+                 System.Threading.Tasks.Task<bool> resultado = new AccesoDatos.CiudadVendedor().EliminarVendedor(codigo);
                 return await resultado;
             }
             catch (Exception ex)
@@ -77,16 +95,18 @@ namespace Web.Negocio
                 throw (ex);
             }
         }
-        #endregion
 
-        #region Modelo
+        
+            #endregion
 
-        /// <summary>
-        /// obtiene modelo completo 
-        /// </summary>
-        /// <param name="ciudad">idciudad</param>
-        /// <returns>modelo</returns>
-        public async System.Threading.Tasks.Task<Models.ModeloCompleto> ObtenerunCiudadVendedor(int ciudad)
+            #region Modelo
+
+            /// <summary>
+            /// obtiene modelo completo 
+            /// </summary>
+            /// <param name="ciudad">idciudad</param>
+            /// <returns>modelo</returns>
+            public async System.Threading.Tasks.Task<Models.ModeloCompleto> ObtenerunCiudadVendedor(int ciudad)
         {
             try
             {
@@ -98,6 +118,9 @@ namespace Web.Negocio
                 throw (ex);
             }
         }
+
+       
+
         #endregion
 
         #region transaccion 
@@ -119,6 +142,35 @@ namespace Web.Negocio
                 throw (ex);
             }
         }
+
+        public async System.Threading.Tasks.Task<bool> GuardarCiudad(CiudadModel modelo)
+        {
+            try
+            {
+                System.Threading.Tasks.Task<bool> resultado = new AccesoDatos.CiudadVendedor().GuardarCiudadAsing(modelo);
+                return await resultado;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
+
+        public async System.Threading.Tasks.Task<bool> GuardarVendedor(VendedoresModel modelo)
+        {
+            try
+            {
+                System.Threading.Tasks.Task<bool> resultado = new AccesoDatos.CiudadVendedor().GuardarVendedorAsing(modelo);
+                return await resultado;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
+       
         #endregion
     }
 }

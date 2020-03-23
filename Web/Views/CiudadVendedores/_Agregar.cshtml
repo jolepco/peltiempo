@@ -20,7 +20,7 @@
 
 
                     <div class="row" id="Identificacion">
-                        <div class="form-group">
+                        <div class="row container-fluid">
                             @if (Model.ciudad.CiudadId == 0)
                             {
 
@@ -56,18 +56,15 @@
                         <br />
                         <br />
 
-                        <div id="detlle">
+                        <div id="row container-fluid detlle">
+                            <div class="col-lg-1"></div>
+                            <button id="agregarVendedor" type="button" onclick="AgregarVendedor()" class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+                                    data-target="#modalagregar">
+                                <i class="fa fa-plus"></i> Agregar Vendedores
+                            </button>
+
                             <br />
-                            <div class="form-group">
-                                <p>
-                                    <button id="agregarVendedor" type="button" onclick="AgregarVendedor()" class="btn btn-primary waves-effect waves-light" data-toggle="modal"
-                                            data-target="#modalagregar">
-                                        <i class="fa fa-plus"></i> Agregar Vendedores
-                                    </button>
-
-                                </p>
-                            </div>
-
+                            <br />
                             <div id="detallevendedor" class="form-group">
                                 @Html.Partial("~/Views/CiudadVendedores/detalleVEndedor.cshtml", Model.vendedores)
                             </div>
@@ -80,13 +77,13 @@
                         @*<button type="submit" data-ajax="true" class="btn btn-primary waves-effect waves-light">Guardar</button>*@
                     </div>
                 </div>
-            }
+                }
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-
+    <script>
 
 
-</script>
+
+    </script>
